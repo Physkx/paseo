@@ -5,7 +5,7 @@ import {
   buildModelVisibilityByProvider,
   isModelVisibilitySupported,
   resolveVisibilityStatus,
-  setModelVisible as saveModelVisible,
+  setModelsVisible as saveModelsVisible,
 } from "@/provider-selection/model-visibility";
 import type { ModelVisibilitySelection } from "@/provider-selection/provider-selection";
 import { useDaemonConfig } from "./use-daemon-config";
@@ -15,7 +15,7 @@ export type ModelVisibilityStatus = ModelVisibilitySelection["status"];
 export interface ModelVisibilityState extends ModelVisibilitySelection {
   isSupported: boolean;
   retry: () => void;
-  setModelVisible: (provider: string, modelId: string, visible: boolean) => Promise<void>;
+  setModelsVisible: (provider: string, modelIds: string[], visible: boolean) => Promise<void>;
 }
 
 // COMPAT(modelVisibility): added in v0.7.3, remove gate after 2027-09-07.
@@ -35,11 +35,11 @@ export function useModelVisibility(serverId: string | null): ModelVisibilityStat
     [config],
   );
 
-  const setModelVisible = useCallback(
-    async (provider: string, modelId: string, visible: boolean) => {
-      await saveModelVisible({
+  const setModelsVisible = useCallback(
+    async (provider: string, modelIds: string[], visible: boolean) => {
+      await saveModelsVisible({
         provider,
-        modelId,
+        modelIds,
         visible,
         patchConfig,
         disconnectedMessage: t("workspace.terminal.hostDisconnected"),
@@ -62,8 +62,8 @@ export function useModelVisibility(serverId: string | null): ModelVisibilityStat
       visibilityByProvider: status === "ready" ? visibilityByProvider : undefined,
       isSupported,
       retry: refetch,
-      setModelVisible,
+      setModelsVisible,
     }),
-    [status, visibilityByProvider, isSupported, refetch, setModelVisible],
+    [status, visibilityByProvider, isSupported, refetch, setModelsVisible],
   );
 }

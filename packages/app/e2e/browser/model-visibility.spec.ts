@@ -11,6 +11,7 @@ import {
   expectFreshVisibleDefault,
   expectHiddenModelAfterReload,
   restoreDefaultModel,
+  toggleAllModels,
   openHiddenModelsDraft,
   expectHiddenModelsRejected,
   recoverHiddenModelSelection,
@@ -31,6 +32,7 @@ test("hiding a model removes it from selectors and restoring brings it back", as
   await expectFreshVisibleDefault(page);
   await expectHiddenModelAfterReload(page, workspace);
   await restoreDefaultModel(page);
+  await toggleAllModels(page);
 });
 
 for (const recovery of ["restore", "profile"] as const) {

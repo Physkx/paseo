@@ -12,7 +12,7 @@ import {
   resolveVisibilityStatus,
   buildModelVisibilityByProvider,
   retryModelSelection,
-  setModelVisible,
+  setModelsVisible,
 } from "@/provider-selection/model-visibility";
 import { openAgentProfileForm } from "@/agent-profiles/internal/profile-form-model";
 
@@ -161,19 +161,19 @@ describe("daemon config consumers", () => {
     const queryClient = new QueryClient();
     const input = {
       provider: "claude",
-      modelId: "visible",
+      modelIds: ["visible"],
       visible: false,
       disconnectedMessage: "Disconnected",
     };
     await expect(
-      setModelVisible({
+      setModelsVisible({
         ...input,
         patchConfig: (patch) =>
           patchDaemonConfig({ serverId: "host", client: null, queryClient, patch }),
       }),
     ).rejects.toThrow("Disconnected");
     expect(adapter.patches).toEqual([]);
-    await setModelVisible({
+    await setModelsVisible({
       ...input,
       patchConfig: (patch) =>
         patchDaemonConfig({ serverId: "host", client: adapter.client, queryClient, patch }),

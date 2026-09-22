@@ -2652,6 +2652,8 @@ export const ru: TranslationResources = {
         custom: "Пользовательские модели",
         updated: "Обновлено {{time}}",
         visibilityToggle: "Показывать {{id}} в выборе модели",
+        visibilityToggleAll: "Показывать все перечисленные модели в выборе модели",
+        allModels: "Все модели",
         visibilityHint:
           "Выключите модель, чтобы скрыть её из выбора моделей. Она останется в этом списке, а уже работающие агенты продолжат работу.",
         visibilitySaveFailed: "Не удалось сохранить видимость модели: {{error}}",

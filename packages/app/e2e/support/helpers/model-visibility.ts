@@ -162,6 +162,30 @@ export async function restoreDefaultModel(page: Page) {
   await closeModelPicker(page);
 }
 
+export async function toggleAllModels(page: Page) {
+  await openModelPicker(page);
+  await openProviderModels(page);
+  await openProviderSettingsFromPicker(page);
+  const all = page.getByTestId("provider-model-visibility-all");
+  await expect(all).toHaveAttribute("aria-checked", "true", { timeout: 30_000 });
+  await all.click();
+  for (const model of PROVIDER.models) {
+    await expect(visibilitySwitch(page, model.id)).toHaveAttribute("aria-checked", "false", {
+      timeout: 30_000,
+    });
+  }
+  await expect(all).toHaveAttribute("aria-checked", "false");
+  await all.click();
+  for (const model of PROVIDER.models) {
+    await expect(visibilitySwitch(page, model.id)).toHaveAttribute("aria-checked", "true", {
+      timeout: 30_000,
+    });
+  }
+  await expect(all).toHaveAttribute("aria-checked", "true");
+  await closeProviderSettings(page);
+  await closeModelPicker(page);
+}
+
 interface HiddenModelsDraftOptions {
   page: Page;
   workspace: SeededWorkspace;

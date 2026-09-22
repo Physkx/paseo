@@ -2646,6 +2646,8 @@ export const ptBR: TranslationResources = {
         custom: "Modelos personalizados",
         updated: "Atualizado {{time}}",
         visibilityToggle: "Mostrar {{id}} nos seletores de modelo",
+        visibilityToggleAll: "Mostrar todos os modelos listados nos seletores de modelo",
+        allModels: "Todos os modelos",
         visibilityHint:
           "Desative um modelo para oculta-lo dos seletores de modelo. Ele continua listado aqui, e os agentes que ja o usam seguem em execucao.",
         visibilitySaveFailed: "Falha ao salvar a visibilidade do modelo: {{error}}",

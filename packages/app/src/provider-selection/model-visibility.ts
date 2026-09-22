@@ -116,15 +116,18 @@ export function isModelVisibilitySupported(
   );
 }
 
-export async function setModelVisible(input: {
+export async function setModelsVisible(input: {
   provider: string;
-  modelId: string;
+  modelIds: string[];
   visible: boolean;
   patchConfig: (patch: MutableDaemonConfigPatch) => Promise<MutableDaemonConfig | undefined>;
   disconnectedMessage: string;
 }): Promise<void> {
+  const modelVisibility = Object.fromEntries(
+    input.modelIds.map((modelId) => [modelId, input.visible]),
+  );
   const result = await input.patchConfig({
-    providers: { [input.provider]: { modelVisibility: { [input.modelId]: input.visible } } },
+    providers: { [input.provider]: { modelVisibility } },
   });
   if (!result) throw new Error(input.disconnectedMessage);
 }

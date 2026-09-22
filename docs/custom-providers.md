@@ -697,8 +697,8 @@ pickers only. The provider still discovers it, the CLI and API still list it, `p
 still launches it, and an agent, profile or schedule that already names it keeps running on it with
 its real label.
 
-The switches in each provider's settings write this map one model at a time, so hidden models
-remain listed there and can be switched back on. Hiding every model of a provider empties its
+The switches in each provider's settings write this map, one model at a time or every listed
+model at once, so hidden models remain listed there and can be switched back on. Hiding every model of a provider empties its
 picker and leaves no visible default. An explicit model choice or saved profile that names a
 hidden model still works.
 

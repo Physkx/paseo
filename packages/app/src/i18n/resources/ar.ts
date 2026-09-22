@@ -2601,6 +2601,8 @@ export const ar: TranslationResources = {
         custom: "نماذج مخصصة",
         updated: "تم تحديث{{time}}",
         visibilityToggle: "إظهار {{id}} في محددات النماذج",
+        visibilityToggleAll: "إظهار كل النماذج المدرجة في محددات النماذج",
+        allModels: "كل النماذج",
         visibilityHint:
           "أوقف نموذجًا لإخفائه من محددات النماذج. يظل مدرجًا هنا، وتستمر الوكلاء التي تستخدمه بالفعل في العمل.",
         visibilitySaveFailed: "تعذر حفظ ظهور النموذج: {{error}}",

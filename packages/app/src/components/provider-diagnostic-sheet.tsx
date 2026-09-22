@@ -61,7 +61,7 @@ interface ModelVisibilityToggleProps {
   modelId: string;
   visible: boolean;
   disabled: boolean;
-  onToggle: (modelId: string, visible: boolean) => void;
+  onToggle: (modelIds: string[], visible: boolean) => void;
 }
 
 function ModelVisibilityToggle({
@@ -72,7 +72,7 @@ function ModelVisibilityToggle({
 }: ModelVisibilityToggleProps) {
   const { t } = useTranslation();
   const handleValueChange = useCallback(
-    (next: boolean) => onToggle(modelId, next),
+    (next: boolean) => onToggle([modelId], next),
     [modelId, onToggle],
   );
   return (
@@ -83,6 +83,42 @@ function ModelVisibilityToggle({
       accessibilityLabel={t("settings.providers.models.visibilityToggle", { id: modelId })}
       testID={`provider-model-visibility-${modelId}`}
     />
+  );
+}
+
+function AllModelsRow({
+  modelIds,
+  visibility,
+}: {
+  modelIds: string[];
+  visibility: ModelRowVisibility | null;
+}) {
+  const { t } = useTranslation();
+  const handleValueChange = useCallback(
+    (next: boolean) => visibility?.onToggle(modelIds, next),
+    [modelIds, visibility],
+  );
+  if (!visibility || modelIds.length === 0) return null;
+  return (
+    <View style={sheetStyles.section}>
+      <View style={settingsStyles.card}>
+        <View style={sheetStyles.modelRow}>
+          <Text style={sheetStyles.modelTitle} numberOfLines={1}>
+            {t("settings.providers.models.allModels")}
+          </Text>
+          <View style={sheetStyles.modelRowFiller} />
+          <View style={sheetStyles.modelRowControls}>
+            <Switch
+              value={modelIds.every((modelId) => visibility.isVisible(modelId))}
+              onValueChange={handleValueChange}
+              disabled={visibility.disabled}
+              accessibilityLabel={t("settings.providers.models.visibilityToggleAll")}
+              testID="provider-model-visibility-all"
+            />
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
@@ -487,7 +523,7 @@ interface ProviderModalBodyProps {
 export interface ModelRowVisibility {
   isVisible: (modelId: string) => boolean;
   disabled: boolean;
-  onToggle: (modelId: string, visible: boolean) => void;
+  onToggle: (modelIds: string[], visible: boolean) => void;
 }
 
 interface ProviderSheetFooterInput {
@@ -579,6 +615,10 @@ function ProviderModalBody(props: ProviderModalBodyProps) {
     visibilityError,
     theme,
   } = props;
+  const listedModelIds = useMemo(
+    () => [...filteredDiscovered, ...filteredCustom].map((model) => model.id),
+    [filteredDiscovered, filteredCustom],
+  );
 
   if (discoveredCount === 0 && additionalCount === 0 && providerSnapshotRefreshing) {
     return (
@@ -637,6 +677,7 @@ function ProviderModalBody(props: ProviderModalBodyProps) {
         </View>
       ) : null}
       {visibilityError ? <Text style={sheetStyles.visibilityError}>{visibilityError}</Text> : null}
+      <AllModelsRow modelIds={listedModelIds} visibility={visibility} />
       {filteredDiscovered.length > 0 ? (
         <View style={sheetStyles.section}>
           <SectionHeader
@@ -752,25 +793,25 @@ export function ProviderDiagnosticSheet({
   }, [provider, refresh]);
 
   const modelVisibility = useModelVisibility(serverId);
-  const [pendingVisibilityModelId, setPendingVisibilityModelId] = useState<string | null>(null);
+  const [visibilitySaving, setVisibilitySaving] = useState(false);
   const [visibilityError, setVisibilityError] = useState<string | null>(null);
   const providerVisibility = modelVisibility.visibilityByProvider?.[provider];
 
   const handleToggleVisibility = useCallback(
-    (modelId: string, nextVisible: boolean) => {
-      setPendingVisibilityModelId(modelId);
+    (modelIds: string[], nextVisible: boolean) => {
+      setVisibilitySaving(true);
       setVisibilityError(null);
-      // Only one toggle is in flight at a time, so a slow response cannot land
-      // after a newer one and resurrect the older value.
+      // Every switch is disabled while a save is in flight, so a slow response
+      // cannot land after a newer one and resurrect the older value.
       void modelVisibility
-        .setModelVisible(provider, modelId, nextVisible)
+        .setModelsVisible(provider, modelIds, nextVisible)
         .catch((error: unknown) => {
           setVisibilityError(
             t("settings.providers.models.visibilitySaveFailed", { error: toErrorMessage(error) }),
           );
         })
         .finally(() => {
-          setPendingVisibilityModelId((current) => (current === modelId ? null : current));
+          setVisibilitySaving(false);
         });
     },
     [modelVisibility, provider, t],
@@ -782,15 +823,10 @@ export function ProviderDiagnosticSheet({
       // Rendered from the config the daemon acknowledged, never from local
       // optimism, so a rejected save shows the state that actually persisted.
       isVisible: (modelId: string) => isModelVisible(providerVisibility, modelId),
-      disabled: pendingVisibilityModelId !== null,
+      disabled: visibilitySaving,
       onToggle: handleToggleVisibility,
     };
-  }, [
-    handleToggleVisibility,
-    modelVisibility.status,
-    pendingVisibilityModelId,
-    providerVisibility,
-  ]);
+  }, [handleToggleVisibility, modelVisibility.status, providerVisibility, visibilitySaving]);
 
   const handleRetryVisibility = useCallback(() => {
     retryModelSelection({

@@ -2663,7 +2663,7 @@ export const es: TranslationResources = {
         custom: "Modelos personalizados",
         updated: "{{time}}actualizado",
         visibilityToggle: "Mostrar {{id}} en los selectores de modelo",
-        visibilityToggleAll: "Mostrar todos los modelos listados en los selectores de modelo",
+        visibilityToggleAll: "Mostrar todos los modelos en los selectores de modelo",
         allModels: "Todos los modelos",
         visibilityHint:
           "Desactiva un modelo para ocultarlo de los selectores de modelo. Sigue apareciendo aqui y los agentes que ya lo usan continuan en ejecucion.",

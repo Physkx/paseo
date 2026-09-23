@@ -509,6 +509,7 @@ interface ProviderModalBodyProps {
   searchActive: boolean;
   filteredDiscovered: AgentModelDefinition[];
   filteredCustom: ProviderProfileModel[];
+  allModelIds: string[];
   deletingModelId: string | null;
   onRefresh: () => void;
   onDeleteCustom: (modelId: string) => void;
@@ -606,6 +607,7 @@ function ProviderModalBody(props: ProviderModalBodyProps) {
     searchActive,
     filteredDiscovered,
     filteredCustom,
+    allModelIds,
     deletingModelId,
     onRefresh,
     onDeleteCustom,
@@ -615,11 +617,6 @@ function ProviderModalBody(props: ProviderModalBodyProps) {
     visibilityError,
     theme,
   } = props;
-  const listedModelIds = useMemo(
-    () => [...filteredDiscovered, ...filteredCustom].map((model) => model.id),
-    [filteredDiscovered, filteredCustom],
-  );
-
   if (discoveredCount === 0 && additionalCount === 0 && providerSnapshotRefreshing) {
     return (
       <View style={sheetStyles.emptyState}>
@@ -677,7 +674,7 @@ function ProviderModalBody(props: ProviderModalBodyProps) {
         </View>
       ) : null}
       {visibilityError ? <Text style={sheetStyles.visibilityError}>{visibilityError}</Text> : null}
-      <AllModelsRow modelIds={listedModelIds} visibility={visibility} />
+      {searchActive ? null : <AllModelsRow modelIds={allModelIds} visibility={visibility} />}
       {filteredDiscovered.length > 0 ? (
         <View style={sheetStyles.section}>
           <SectionHeader
@@ -786,6 +783,10 @@ export function ProviderDiagnosticSheet({
   const filteredCustom = useMemo(
     () => rankModels(additionalModels, q, (m) => [m.label, m.id]),
     [additionalModels, q],
+  );
+  const allModelIds = useMemo(
+    () => [...discoveredModels, ...additionalModels].map((model) => model.id),
+    [discoveredModels, additionalModels],
   );
 
   const handleRefreshModels = useCallback(() => {
@@ -898,6 +899,7 @@ export function ProviderDiagnosticSheet({
           searchActive={Boolean(q)}
           filteredDiscovered={filteredDiscovered}
           filteredCustom={filteredCustom}
+          allModelIds={allModelIds}
           deletingModelId={deletingModelId}
           onRefresh={handleRefreshModels}
           onDeleteCustom={handleDeleteCustom}

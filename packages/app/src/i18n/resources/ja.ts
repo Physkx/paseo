@@ -2630,7 +2630,7 @@ export const ja: TranslationResources = {
         custom: "カスタムモデル",
         updated: "{{time}}に更新",
         visibilityToggle: "モデル選択に {{id}} を表示",
-        visibilityToggleAll: "モデル選択に一覧のすべてのモデルを表示",
+        visibilityToggleAll: "モデル選択にすべてのモデルを表示",
         allModels: "すべてのモデル",
         visibilityHint:
           "モデルをオフにすると、モデル選択から隠れます。ここには残り、すでに使用中のエージェントはそのまま動作します。",

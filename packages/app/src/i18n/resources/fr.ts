@@ -2669,7 +2669,7 @@ export const fr: TranslationResources = {
         custom: "Modèles personnalisés",
         updated: "{{time}}mis à jour",
         visibilityToggle: "Afficher {{id}} dans les selecteurs de modele",
-        visibilityToggleAll: "Afficher tous les modeles listes dans les selecteurs de modele",
+        visibilityToggleAll: "Afficher tous les modeles dans les selecteurs de modele",
         allModels: "Tous les modeles",
         visibilityHint:
           "Desactivez un modele pour le masquer des selecteurs de modele. Il reste liste ici et les agents qui l'utilisent deja continuent de fonctionner.",

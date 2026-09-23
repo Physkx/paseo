@@ -2725,7 +2725,7 @@ export const en = {
         custom: "Custom models",
         updated: "Updated {{time}}",
         visibilityToggle: "Show {{id}} in model pickers",
-        visibilityToggleAll: "Show all listed models in model pickers",
+        visibilityToggleAll: "Show all models in model pickers",
         allModels: "All models",
         visibilityHint:
           "Switch a model off to hide it from model pickers. It stays listed here, and agents already using it keep running.",

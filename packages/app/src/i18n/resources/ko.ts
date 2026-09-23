@@ -2618,7 +2618,7 @@ export const ko: TranslationResources = {
         custom: "사용자 지정 모델",
         updated: "{{time}} 업데이트됨",
         visibilityToggle: "모델 선택기에 {{id}} 표시",
-        visibilityToggleAll: "모델 선택기에 나열된 모든 모델 표시",
+        visibilityToggleAll: "모델 선택기에 모든 모델 표시",
         allModels: "모든 모델",
         visibilityHint:
           "모델을 끄면 모델 선택기에서 숨겨집니다. 여기에는 계속 표시되며, 이미 사용 중인 에이전트는 그대로 실행됩니다.",

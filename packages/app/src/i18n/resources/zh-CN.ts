@@ -2570,7 +2570,7 @@ export const zhCN: TranslationResources = {
         custom: "自定义 Models",
         updated: "已更新 {{time}}",
         visibilityToggle: "在模型选择器中显示 {{id}}",
-        visibilityToggleAll: "在模型选择器中显示列出的所有模型",
+        visibilityToggleAll: "在模型选择器中显示所有模型",
         allModels: "所有模型",
         visibilityHint:
           "关闭某个模型即可将其从模型选择器中隐藏。它仍会显示在此列表中，已经在使用它的代理会继续运行。",
